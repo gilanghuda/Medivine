@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "522214453402",
+    "project_id": "hackjam-c3718",
+    "storage_bucket": "hackjam-c3718.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522214453402:android:1e15f7a85c3b864cacef23",
+        "android_client_info": {
+          "package_name": "com.example.isj2_android_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRv1BIwH2RJLNGczISnyYUihS6-QetsYI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
