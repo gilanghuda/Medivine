@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'features/presentation/provider/auth_provider.dart';
+import 'features/domain/usecases/save_analysis.dart';
 import 'features/presentation/provider/analisis_provider.dart';
 import 'di/injection_container.dart' as di;
 import 'features/presentation/router/app_route.dart';
@@ -34,9 +35,13 @@ class MyApp extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(
-          create: (_) => AnalisisProvider(
-            apiKey: 'AIzaSyCF3dW4phZjlfayvtZvJTRXUlcHqpFqNW8',
-          ),
+          create: (_) {
+            final provider = AnalisisProvider(
+              apiKey: 'AIzaSyCF3dW4phZjlfayvtZvJTRXUlcHqpFqNW8',
+            );
+            provider.setSaveAnalysisUsecase(di.sl<SaveAnalysis>());
+            return provider;
+          },
         ),
       ],
       child: MaterialApp.router(

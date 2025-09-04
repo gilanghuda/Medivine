@@ -6,6 +6,10 @@ import 'package:medivine/features/domain/usecases/login_user.dart';
 import 'package:medivine/features/domain/usecases/register_user.dart';
 import 'package:medivine/features/presentation/provider/auth_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:medivine/features/data/datasources/analysis_service.dart';
+import 'package:medivine/features/data/repositories/save_repository_impl.dart';
+import 'package:medivine/features/domain/repositories/save_repository.dart';
+import 'package:medivine/features/domain/usecases/save_analysis.dart';
 
 final sl = GetIt.instance;
 
@@ -28,4 +32,10 @@ void setupDependencyInjection() {
         loginUser: sl(),
         registerUser: sl(),
       ));
+
+  // Analysis & Save dependencies
+  sl.registerLazySingleton<GeminiAnalysisService>(() =>
+      GeminiAnalysisService(apiKey: 'AIzaSyCF3dW4phZjlfayvtZvJTRXUlcHqpFqNW8'));
+  sl.registerLazySingleton<SaveRepository>(() => SaveRepositoryImpl(sl()));
+  sl.registerLazySingleton<SaveAnalysis>(() => SaveAnalysis(sl()));
 }

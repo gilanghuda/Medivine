@@ -1,21 +1,35 @@
-import 'primary_diagnosis.dart';
-import 'detection.dart';
+import 'primary_diagnosis_model.dart';
+import 'detection_model.dart';
+import '../../domain/entities/analysis.dart';
 
-class MedicalAnalysisResult {
-  final PrimaryDiagnosis primaryDiagnosis;
-  final List<Detection> allDetections;
-  final List<String> symptoms;
-  final List<String> recommendations;
-
+class MedicalAnalysisResult extends AnalysisEntity {
   MedicalAnalysisResult({
-    required this.primaryDiagnosis,
-    required this.allDetections,
-    required this.symptoms,
-    required this.recommendations,
-  });
+    String? imageUrl,
+    required PrimaryDiagnosis primaryDiagnosis,
+    required List<Detection> allDetections,
+    required List<String> symptoms,
+    required List<String> recommendations,
+  }) : super(
+          imageUrl: imageUrl,
+          primaryDiagnosis: PrimaryDiagnosisEntity(
+            name: primaryDiagnosis.name,
+            accuracy: primaryDiagnosis.accuracy,
+            description: primaryDiagnosis.description,
+          ),
+          allDetections: allDetections
+              .map((d) => DetectionEntity(
+                    condition: d.condition,
+                    percentage: d.percentage,
+                  ))
+              .toList(),
+          symptoms: symptoms,
+          recommendations: recommendations,
+        );
 
   factory MedicalAnalysisResult.fromJson(Map<String, dynamic> json) {
     return MedicalAnalysisResult(
+      // imageUrl opsional, bisa null
+      imageUrl: json['image_url'],
       primaryDiagnosis:
           PrimaryDiagnosis.fromJson(json['primary_diagnosis'] ?? {}),
       allDetections: (json['all_detections'] as List<dynamic>?)
