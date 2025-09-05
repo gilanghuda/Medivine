@@ -30,11 +30,17 @@ class _BerandaScreenState extends State<BerandaScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFFF9AA2),
         elevation: 0,
-        leading: const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            backgroundColor: Colors.black87,
-            child: Icon(Icons.person, color: Colors.white, size: 20),
+        leading: Container(
+          margin: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+          child: InkWell(
+            onTap: () {
+              context.push('/profile');
+            },
+            borderRadius: BorderRadius.circular(50),
+            child: const CircleAvatar(
+              backgroundColor: Colors.black87,
+              child: Icon(Icons.person, color: Colors.white, size: 20),
+            ),
           ),
         ),
         title: Consumer<AuthProvider>(
@@ -57,8 +63,8 @@ class _BerandaScreenState extends State<BerandaScreen> {
                   'Hello, $name! 👋',
                   style: const TextStyle(
                     color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
@@ -68,7 +74,7 @@ class _BerandaScreenState extends State<BerandaScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              context.go('/profile');
+              context.go('/notifications');
             },
             icon: const Icon(Icons.notifications_outlined, color: Colors.black),
           ),
@@ -91,80 +97,93 @@ class _BerandaScreenState extends State<BerandaScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Main service card
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFFFF9AA2), Color(0xFFFFB7B2)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                const SizedBox(height: 16),
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.fromLTRB(140, 20, 20, 20),
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFFFF8F9E), Color(0xFFFFB7B2)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Deteksi Dini AI',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Text(
+                            'Periksa kesehatanmu melalui analisis rongga mulut dengan teknologi artificial Intelligence',
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              height: 1.3,
+                            ),
+                          ),
+                          const SizedBox(height: 45), // Space for button
+                        ],
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    // Positioned image on the left
+                    Positioned(
+                      left: -10,
+                      top: -20,
+                      child: Image.asset(
+                        'assets/images/beranda1.png',
+                        width: 160,
+                        height: 160,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    // Positioned button at bottom
+                    Positioned(
+                      bottom: -20,
+                      right: 20,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.go('/scan');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: const Color(0xFFFF8F9E),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 12,
+                          ),
+                          elevation: 4,
+                        ),
+                        child: Row(
                           children: [
+                            const Icon(Icons.camera_alt_outlined, size: 20),
+                            const SizedBox(width: 8),
                             const Text(
-                              'Butuh Cek Lab?',
+                              'Mulai Pemeriksaan',
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              'Dapatkan hasil akurat dengan teknologi modern',
-                              style: TextStyle(
-                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
                                 fontSize: 14,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            ElevatedButton(
-                              onPressed: () {
-                                context.go('/scan');
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.pink[300],
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 24,
-                                  vertical: 12,
-                                ),
-                              ),
-                              child: const Text(
-                                'Mulai Pemeriksaan',
-                                style: TextStyle(fontWeight: FontWeight.w600),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        child: const Icon(
-                          Icons.medical_services_outlined,
-                          color: Colors.white,
-                          size: 40,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
 
                 const SizedBox(height: 24),
@@ -186,8 +205,9 @@ class _BerandaScreenState extends State<BerandaScreen> {
                   title: 'Artificial Intelligence',
                   subtitle:
                       'Konsultasi cerdas dengan AI untuk diagnosa awal yang akurat',
-                  color: const Color(0xFFFF6B6B),
-                  icon: Icons.psychology_outlined,
+                  color: const Color(0xFFFF8F9E),
+                  image: 'assets/images/beranda2.png',
+                  onTap: () => context.go('/scan'),
                 ),
 
                 const SizedBox(height: 12),
@@ -197,9 +217,11 @@ class _BerandaScreenState extends State<BerandaScreen> {
                   title: 'Konsultasi Dokter',
                   subtitle:
                       'Konsultasi langsung dengan dokter spesialis berpengalaman',
-                  color: const Color(0xFFFF8E8E),
-                  icon: Icons.local_hospital_outlined,
-                  iconOnRight: true,
+                  color: const Color(0xFFFF8F9E),
+                  image:
+                      'assets/images/beranda3.png', // Replace icon with image
+                  imageOnRight: false,
+                  onTap: () => context.go('/recommendation-doctors'),
                 ),
 
                 const SizedBox(height: 24),
@@ -213,168 +235,189 @@ class _BerandaScreenState extends State<BerandaScreen> {
                     color: Colors.black87,
                   ),
                 ),
-
                 const SizedBox(height: 16),
 
-                // Health Question Card
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFF9AA2),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                // Article cards in vertical layout
+                Column(
+                  children: [
+                    // First article with pink background
+                    GestureDetector(
+                      onTap: () => context.push('/detail-artikel'),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFF9AA2),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Row(
                           children: [
-                            const Text(
-                              'Apa itu penyakit jantung koroner?',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                            ClipRRect(
+                              borderRadius: const BorderRadius.horizontal(
+                                  left: Radius.circular(12)),
+                              child: Image.asset(
+                                'assets/images/beranda4.png',
+                                height: 100,
+                                width: 100,
+                                fit: BoxFit.cover,
                               ),
                             ),
-                            const SizedBox(height: 8),
-                            const Text(
-                              'Ketahui gejala, penyebab, dan cara pencegahan penyakit jantung koroner',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Apa itu menular seksual?',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      'Mari ketahui penyakit yang dapat menular melalui hubungan seksual',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.white.withOpacity(0.9),
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(width: 16),
-                      Container(
-                        width: 60,
-                        height: 60,
+                    ),
+                    const SizedBox(height: 16),
+
+                    GestureDetector(
+                      onTap: () => context.push('/detail-artikel'),
+                      child: Container(
+                        width: double.infinity,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: const Icon(
-                          Icons.favorite_outline,
                           color: Colors.white,
-                          size: 30,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(12)),
+                              child: Image.asset(
+                                'assets/images/beranda6.png',
+                                width: double.infinity,
+                                height: 150,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    'Ini Dia 7 Manfaat Minum Air Putih Bagi Tubuh',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'Berapa gelas minum air putih hari ini? Minum air putih yang cukup, sangat bermanfaat buat tubuh kita.',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                // Medical illustration card
-                Container(
-                  width: double.infinity,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF87CEEB),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(Icons.local_hospital,
-                            color: Colors.white, size: 40),
-                        Icon(Icons.medical_services,
-                            color: Colors.white, size: 40),
-                        Icon(Icons.health_and_safety,
-                            color: Colors.white, size: 40),
-                      ],
                     ),
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                // Health tips section
-                const Text(
-                  'Pemeriksaan Gula Darah Itu Mudah',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-
-                const SizedBox(height: 8),
-
-                const Text(
-                  'Pantau kadar gula darah Anda secara rutin untuk menjaga kesehatan dan mencegah komplikasi diabetes',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    height: 1.4,
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                // Benefits card
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+                    const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: () => context.push('/detail-artikel'),
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(12)),
+                              child: Image.asset(
+                                'assets/images/beranda5.png',
+                                width: double.infinity,
+                                height: 150,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: const [
+                                  Text(
+                                    'Pemeriksaan Gusi Cuma Rp10.000!',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    '"Jangan tunggu sampai parah! Deteksi sejak dini untuk mencegah radang gusi berkembang menjadi penyakit yang lebih serius."',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'MANFAAT MINUM AIR',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'UNTUK TUBUH',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-
-                // Last article
-                const Text(
-                  'Ini Dia 7 Manfaat Minum Air Putih Bagi Tubuh',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-
-                const SizedBox(height: 8),
-
-                const Text(
-                  'Ketahui berbagai manfaat air putih bagi kesehatan tubuh yang perlu Anda ketahui untuk hidup lebih sehat',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                    height: 1.4,
-                  ),
+                  ],
                 ),
 
                 const SizedBox(height: 80), // Space for bottom navigation
@@ -390,74 +433,79 @@ class _BerandaScreenState extends State<BerandaScreen> {
     required String title,
     required String subtitle,
     required Color color,
-    required IconData icon,
-    bool iconOnRight = false,
+    required String image,
+    bool imageOnRight = false,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          if (!iconOnRight) ...[
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              child: Icon(
-                icon,
-                color: Colors.white,
-                size: 24,
-              ),
-            ),
-            const SizedBox(width: 16),
-          ],
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Row(
+          children: [
+            if (!imageOnRight) ...[
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(25),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                  ),
+                child: Image.asset(
+                  image,
+                  width: 24,
+                  height: 24,
                 ),
-              ],
-            ),
-          ),
-          if (iconOnRight) ...[
-            const SizedBox(width: 16),
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(25),
               ),
-              child: Icon(
-                icon,
-                color: Colors.white,
-                size: 24,
+              const SizedBox(width: 16),
+            ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
             ),
+            if (imageOnRight) ...[
+              const SizedBox(width: 16),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Image.asset(
+                  image,
+                  width: 24,
+                  height: 24,
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

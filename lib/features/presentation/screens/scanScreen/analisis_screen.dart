@@ -279,7 +279,9 @@ class AnalisisScreen extends StatelessWidget {
                                   Container(
                                     width: double.infinity,
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        context.go('/recommendation-doctors');
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Color(0xFFDC143C),
                                         padding: const EdgeInsets.symmetric(
@@ -407,7 +409,7 @@ class AnalisisScreen extends StatelessWidget {
                                       Expanded(
                                         child: OutlinedButton(
                                           onPressed: () {
-                                            context.go('/home');
+                                            context.go('/');
                                           },
                                           style: OutlinedButton.styleFrom(
                                             side: const BorderSide(

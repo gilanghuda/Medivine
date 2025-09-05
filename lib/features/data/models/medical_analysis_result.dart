@@ -28,7 +28,6 @@ class MedicalAnalysisResult extends AnalysisEntity {
 
   factory MedicalAnalysisResult.fromJson(Map<String, dynamic> json) {
     return MedicalAnalysisResult(
-      // imageUrl opsional, bisa null
       imageUrl: json['image_url'],
       primaryDiagnosis:
           PrimaryDiagnosis.fromJson(json['primary_diagnosis'] ?? {}),

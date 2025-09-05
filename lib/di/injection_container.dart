@@ -10,6 +10,12 @@ import 'package:medivine/features/data/datasources/analysis_service.dart';
 import 'package:medivine/features/data/repositories/save_repository_impl.dart';
 import 'package:medivine/features/domain/repositories/save_repository.dart';
 import 'package:medivine/features/domain/usecases/save_analysis.dart';
+import 'package:medivine/features/data/datasources/chat_service.dart';
+import 'package:medivine/features/data/repositories/chat_repository_impl.dart';
+import 'package:medivine/features/domain/repositories/chat_repository.dart';
+import 'package:medivine/features/domain/usecases/get_message.dart';
+import 'package:medivine/features/domain/usecases/send_message.dart';
+import 'package:medivine/features/presentation/provider/chat_provider.dart';
 
 final sl = GetIt.instance;
 
@@ -38,4 +44,14 @@ void setupDependencyInjection() {
       GeminiAnalysisService(apiKey: 'AIzaSyCF3dW4phZjlfayvtZvJTRXUlcHqpFqNW8'));
   sl.registerLazySingleton<SaveRepository>(() => SaveRepositoryImpl(sl()));
   sl.registerLazySingleton<SaveAnalysis>(() => SaveAnalysis(sl()));
+
+  // Chat dependencies
+  sl.registerLazySingleton<ChatService>(() => ChatService(firestore: sl()));
+  sl.registerLazySingleton<ChatRepository>(() => ChatRepositoryImpl(sl()));
+  sl.registerLazySingleton<GetMessage>(() => GetMessage(sl()));
+  sl.registerLazySingleton<SendMessage>(() => SendMessage(sl()));
+  sl.registerFactory<ChatProvider>(() => ChatProvider(
+        getMessage: sl(),
+        sendMessage: sl(),
+      ));
 }

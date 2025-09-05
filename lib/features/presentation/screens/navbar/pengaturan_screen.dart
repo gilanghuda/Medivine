@@ -23,11 +23,6 @@ class PengaturanScreen extends StatelessWidget {
           elevation: 0,
           backgroundColor: bg,
           surfaceTintColor: Colors.transparent,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded),
-            color: textPrimary,
-            onPressed: () => Navigator.maybePop(context),
-          ),
           title: const Text(
             'Pengaturan',
             style: TextStyle(
@@ -125,18 +120,6 @@ class PengaturanScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
-              // garis “home indicator” gaya iOS untuk nuansa mockup
-              const SizedBox(height: 4),
-              Container(
-                width: 120,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFBFBFBF),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-              ),
-              const SizedBox(height: 12),
             ],
           ),
         ),
@@ -235,6 +218,7 @@ class PengaturanScreen extends StatelessWidget {
                     onPressed: () async {
                       await Provider.of<AuthProvider>(context, listen: false)
                           .logout(context);
+                      context.go('/signup');
                     },
                   ),
                 ],

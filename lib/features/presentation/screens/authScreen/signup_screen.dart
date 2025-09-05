@@ -16,6 +16,17 @@ class _WelcomeBackScreenState extends State<SignupScreen> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
+  bool _obscurePassword = true;
+  bool _obscureConfirm = true;
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context);
@@ -122,7 +133,7 @@ class _WelcomeBackScreenState extends State<SignupScreen> {
                   const SizedBox(height: 8),
                   TextField(
                     controller: passwordController,
-                    obscureText: true,
+                    obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       hintText: 'Masukkan kata sandi',
                       hintStyle: TextStyle(color: Colors.grey[400]),
@@ -135,6 +146,16 @@ class _WelcomeBackScreenState extends State<SignupScreen> {
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 16,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.black38,
+                        ),
+                        onPressed: () => setState(
+                            () => _obscurePassword = !_obscurePassword),
                       ),
                     ),
                   ),
@@ -152,7 +173,7 @@ class _WelcomeBackScreenState extends State<SignupScreen> {
                   const SizedBox(height: 8),
                   TextField(
                     controller: confirmPasswordController,
-                    obscureText: true,
+                    obscureText: _obscureConfirm,
                     decoration: InputDecoration(
                       hintText: 'Masukkan kata sandi',
                       hintStyle: TextStyle(color: Colors.grey[400]),
@@ -165,6 +186,16 @@ class _WelcomeBackScreenState extends State<SignupScreen> {
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 16,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscureConfirm
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.black38,
+                        ),
+                        onPressed: () =>
+                            setState(() => _obscureConfirm = !_obscureConfirm),
                       ),
                     ),
                   ),

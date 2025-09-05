@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:medivine/features/presentation/screens/navbar/beranda_screen.dart';
+import 'package:medivine/features/presentation/screens/navbar/notification_screen.dart';
 import 'package:medivine/features/presentation/screens/navbar/pengaturan_screen.dart';
-import 'package:medivine/features/presentation/screens/onBoarding/on_boarding_screen.dart';
+import 'package:medivine/features/presentation/screens/navbar/simpan_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,9 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
         index: _selectedIndex,
         children: [
           BerandaScreen(),
-          OnBoardingScreen(),
-          // SimpanScreen(),
-          // NotifikasiScreen(),
+          SimpanScreen(),
+          NotificationScreen(),
           PengaturanScreen(),
         ],
       ),
@@ -44,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Home',
           ),
           const BottomNavigationBarItem(
-            icon: Icon(Icons.save),
-            label: 'Komunitas',
+            icon: Icon(Icons.save_alt_outlined),
+            label: 'Simpan',
           ),
           const BottomNavigationBarItem(
             icon: Icon(Icons.notifications),

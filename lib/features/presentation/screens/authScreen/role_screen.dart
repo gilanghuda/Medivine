@@ -37,14 +37,6 @@ class _RoleScreenState extends State<RoleScreen> {
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
                   children: [
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.black54,
-                        size: 24,
-                      ),
-                    ),
                     const Expanded(
                       child: Text(
                         'Gender',
@@ -106,16 +98,14 @@ class _RoleScreenState extends State<RoleScreen> {
                     children: [
                       _buildGenderOption(
                         'Laki-laki',
-                        'male',
-                        Icons.person,
+                        'assets/images/male.png',
                         Colors.blue.shade300,
                         context,
                       ),
                       const SizedBox(height: 20),
                       _buildGenderOption(
                         'Perempuan',
-                        'female',
-                        Icons.person,
+                        'assets/images/female.png',
                         Colors.pink.shade300,
                         context,
                       ),
@@ -127,35 +117,28 @@ class _RoleScreenState extends State<RoleScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              width: 40,
-                              height: 40,
+                              width: 120,
+                              height: 64,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(8),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
+                                    color: Colors.black.withOpacity(0.08),
                                     blurRadius: 8,
                                     offset: const Offset(0, 2),
                                   ),
                                 ],
                               ),
-                              child: const Icon(
-                                Icons.medical_services,
-                                color: Color(0xFFFF6B9D),
-                                size: 24,
+                              child: Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Image.asset(
+                                  'assets/images/medivine.png',
+                                  fit: BoxFit.contain,
+                                ),
                               ),
                             ),
                             const SizedBox(width: 12),
-                            const Text(
-                              'MEDIVINE',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Color(0xFFFF6B9D),
-                                letterSpacing: 1.2,
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -170,35 +153,44 @@ class _RoleScreenState extends State<RoleScreen> {
     );
   }
 
-  Widget _buildGenderOption(String title, String value, IconData icon,
-      Color iconColor, BuildContext context) {
-    return GestureDetector(
+  Widget _buildGenderOption(
+      String title, String imagePath, Color iconColor, BuildContext context) {
+    return InkWell(
       onTap: () async {
         await Provider.of<AuthProvider>(context, listen: false)
-            .saveUserProfile(value);
+            .saveUserProfile(title.toLowerCase());
         context.go('/');
       },
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           children: [
-            // Avatar circle
+            // Avatar image
             Container(
-              width: 50,
-              height: 50,
+              width: 56,
+              height: 56,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: iconColor.withOpacity(0.2),
+                color: iconColor.withOpacity(0.14),
               ),
-              child: Icon(
-                icon,
-                color: iconColor,
-                size: 28,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             const SizedBox(width: 16),
@@ -208,9 +200,14 @@ class _RoleScreenState extends State<RoleScreen> {
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFFFF6B9D),
+                  color: Color(0xFFB83B52),
                 ),
               ),
+            ),
+            // small chevron
+            const Icon(
+              Icons.chevron_right,
+              color: Colors.black26,
             ),
           ],
         ),

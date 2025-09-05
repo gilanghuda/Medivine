@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:medivine/features/presentation/provider/chat_provider.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'features/presentation/provider/auth_provider.dart';
@@ -37,11 +38,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) {
             final provider = AnalisisProvider(
-              apiKey: 'AIzaSyCF3dW4phZjlfayvtZvJTRXUlcHqpFqNW8',
+              apiKey:
+                  'anjirrr lupaa akuuu, gapapa wes abis ini tak nonaktifin kok',
             );
             provider.setSaveAnalysisUsecase(di.sl<SaveAnalysis>());
             return provider;
           },
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.sl<ChatProvider>(),
         ),
       ],
       child: MaterialApp.router(

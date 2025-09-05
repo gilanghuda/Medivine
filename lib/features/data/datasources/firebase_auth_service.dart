@@ -1,8 +1,5 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:medivine/features/data/models/user_model.dart';
 
 class FirebaseAuthService {
@@ -58,8 +55,6 @@ class FirebaseAuthService {
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
-      // await _googleSignIn.signOut();
-      // Navigasi pindah ke provider, bukan di sini
     } catch (e) {
       throw Exception('Failed to sign out: $e');
     }

@@ -1,7 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, await_only_futures
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:medivine/features/data/datasources/firebase_auth_service.dart';
 import 'package:medivine/features/data/models/user_model.dart';
@@ -17,6 +14,8 @@ class AuthProvider with ChangeNotifier {
   String? _userId;
   UserModel? _currentUser;
   UserModel? get currentUser => _currentUser;
+
+  String? get role => _currentUser?.role;
 
   AuthProvider({
     required this.authService,
@@ -52,11 +51,21 @@ class AuthProvider with ChangeNotifier {
     try {
       await registerUser(RegisterParams(email: email, password: password));
       await getCurrentUserProfile();
-      // Pindah ke role screen hanya jika tidak ada error
+      final firebaseUser = authService.getCurrentUser();
+      if (firebaseUser != null) {
+        final name = email.split('@').first;
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(firebaseUser.uid)
+            .set({
+          'email': firebaseUser.email ?? '',
+          'name': name,
+        }, SetOptions(merge: true));
+      }
+
       if (_errorMessage == null) {
         context.go('/chooseRole');
       }
-      // Proses simpan profil user dilakukan setelah pilih gender di RoleScreen
     } catch (e) {
       _setError(e.toString());
     } finally {
@@ -80,9 +89,20 @@ class AuthProvider with ChangeNotifier {
   Future<void> getCurrentUserProfile() async {
     final firebaseUser = authService.getCurrentUser();
     if (firebaseUser != null) {
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(firebaseUser.uid)
+          .get();
+      final data = userDoc.data();
       _currentUser = UserModel(
         id: firebaseUser.uid,
         email: firebaseUser.email ?? '',
+        role: data != null && data['role'] != null
+            ? data['role'] as String
+            : null,
+        name: data != null && data['name'] != null
+            ? data['name'] as String
+            : null,
       );
       _userId = firebaseUser.uid;
     } else {

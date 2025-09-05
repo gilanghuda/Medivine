@@ -1,64 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:http/http.dart' as http;
-import 'package:medivine/features/presentation/screens/scanScreen/analisis_screen.dart';
-import 'package:medivine/features/presentation/screens/scanScreen/prompt.dart'
-    as prompt_file;
 import 'package:provider/provider.dart';
 import '../../provider/analisis_provider.dart';
-
-// Future<String> analyzeWithGemini(File image) async {
-//   // Ganti dengan API key kamu
-//   const apiKey = 'AIzaSyCF3dW4phZjlfayvtZvJTRXUlcHqpFqNW8';
-//   final url = Uri.parse(
-//       'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$apiKey');
-
-//   // Encode image ke base64
-//   final bytes = await image.readAsBytes();
-//   final base64Image = base64Encode(bytes);
-
-//   // Ambil prompt dari prompt.dart
-//   final prompt = prompt_file.prompt;
-
-//   final body = jsonEncode({
-//     "contents": [
-//       {
-//         "parts": [
-//           {"text": prompt},
-//           {
-//             "inline_data": {"mime_type": "image/jpeg", "data": base64Image}
-//           }
-//         ]
-//       }
-//     ]
-//   });
-
-//   try {
-//     final response = await http.post(
-//       url,
-//       headers: {"Content-Type": "application/json"},
-//       body: body,
-//     );
-//     if (response.statusCode == 200) {
-//       final data = jsonDecode(response.body);
-//       final text = data['candidates']?[0]?['content']?['parts']?[0]?['text'];
-//       if (text != null && text is String) {
-//         return text;
-//       } else {
-//         return "Tidak ada hasil analisis dari Gemini.";
-//       }
-//     } else {
-//       print("debug ${response.body}");
-//       return "Gagal request ke Gemini: ${response.statusCode}";
-//     }
-//   } catch (e) {
-//     return "Terjadi error saat request ke Gemini: $e";
-//   }
-// }
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key}) : super(key: key);
@@ -119,9 +65,7 @@ class _CameraScreenState extends State<CameraScreen> {
       });
       await _controller!.pausePreview();
       _showConfirmDialog(image);
-    } catch (e) {
-      // Handle error
-    }
+    } catch (e) {}
   }
 
   void _showConfirmDialog(XFile image) {
@@ -159,8 +103,7 @@ class _CameraScreenState extends State<CameraScreen> {
                       setState(() {
                         _capturedImage = null;
                       });
-                      await _controller
-                          ?.resumePreview(); // Resume preview setelah batal
+                      await _controller?.resumePreview();
                     },
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.pink,
@@ -175,7 +118,7 @@ class _CameraScreenState extends State<CameraScreen> {
                   ElevatedButton(
                     onPressed: () async {
                       Navigator.of(dialogContext).pop();
-                      // Tampilkan loading dialog
+
                       showDialog(
                         context: context,
                         barrierDismissible: false,
@@ -194,8 +137,7 @@ class _CameraScreenState extends State<CameraScreen> {
                         setState(() {
                           _capturedImage = null;
                         });
-                        await _controller
-                            ?.resumePreview(); // Resume preview setelah proses selesai
+                        await _controller?.resumePreview();
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -232,7 +174,6 @@ class _CameraScreenState extends State<CameraScreen> {
           ),
           child: Stack(
             children: [
-              // Corner overlays
               Positioned(
                 top: 0,
                 left: 0,
@@ -357,7 +298,6 @@ class _CameraScreenState extends State<CameraScreen> {
                           ],
                         ),
                       ),
-                      // Home indicator
                       Container(
                         width: 120,
                         height: 4,

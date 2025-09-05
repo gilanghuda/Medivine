@@ -46,7 +46,6 @@ class GeminiAnalysisService {
         final data = jsonDecode(response.body);
         final text = data['candidates']?[0]?['content']?['parts']?[0]?['text'];
         if (text != null && text is String) {
-          // Clean markdown if any
           final cleanText =
               text.replaceAll('```json', '').replaceAll('```', '').trim();
           final analysisJson = jsonDecode(cleanText);

@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:medivine/features/data/datasources/analysis_service.dart';
-import 'package:medivine/features/data/models/medical_analysis_result.dart';
 import 'package:medivine/features/domain/entities/analysis.dart';
 import 'package:medivine/features/domain/repositories/save_repository.dart';
 import 'package:medivine/features/presentation/provider/auth_provider.dart';
 import 'package:get_it/get_it.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 class SaveRepositoryImpl implements SaveRepository {
   final GeminiAnalysisService service;
@@ -13,14 +13,15 @@ class SaveRepositoryImpl implements SaveRepository {
   @override
   Future<void> uploadAndSaveAnalysis(
       File imageFile, AnalysisEntity analysis) async {
-    print('DEBUG : Mulai upload gambar ke Cloudinary...');
     final imageUrl = await service.uploadImageToCloudinary(imageFile.path);
-    print('DEBUG : Hasil upload imageUrl: $imageUrl');
     if (imageUrl == null) throw Exception('Upload gambar gagal');
 
-    // Ambil user id dari AuthProvider (pastikan sudah register di provider)
     final authProvider = GetIt.I<AuthProvider>();
-    final userId = authProvider.currentUser?.id;
+    String? userId = authProvider.currentUser?.id;
+    if (userId == null) {
+      final firebaseUser = firebase_auth.FirebaseAuth.instance.currentUser;
+      userId = firebaseUser?.uid;
+    }
 
     final data = {
       'image_url': imageUrl,
@@ -40,8 +41,6 @@ class SaveRepositoryImpl implements SaveRepository {
       'recommendations': analysis.recommendations,
       'created_at': DateTime.now().toIso8601String(),
     };
-    print('DEBUG : Data yang akan disimpan ke Firestore: $data');
     await service.saveAnalysisToFirestore(data);
-    print('DEBUG : Selesai simpan ke Firestore');
   }
 }

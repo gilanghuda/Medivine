@@ -38,7 +38,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Simpan context root
     final rootContext = context;
     return Scaffold(
       backgroundColor: _currentPage == 1 ? Colors.pink[100] : Colors.white,

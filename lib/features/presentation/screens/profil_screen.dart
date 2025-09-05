@@ -1,232 +1,241 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:medivine/features/presentation/provider/auth_provider.dart';
 
-class ProfilScreen extends StatelessWidget {
+class ProfilScreen extends StatefulWidget {
   const ProfilScreen({Key? key}) : super(key: key);
 
   @override
+  State<ProfilScreen> createState() => _ProfilScreenState();
+}
+
+class _ProfilScreenState extends State<ProfilScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      authProvider.currentUser == null
+          ? authProvider.getCurrentUserProfile()
+          : null;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
-      body: Column(
-        children: [
-          // Header with curved pink background
-          SizedBox(
-            height: 280,
-            child: Stack(
-              children: [
-                // Pink curved background
-                CustomPaint(
-                  size: Size(MediaQuery.of(context).size.width, 280),
-                  painter: PinkCurvePainter(),
-                ),
-                // Content overlay
-                SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      children: [
-                        // Top bar
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Consumer<AuthProvider>(
+      builder: (context, authProvider, _) {
+        final user = authProvider.currentUser;
+
+        return Scaffold(
+          backgroundColor: const Color(0xFFF8F9FA),
+          body: Column(
+            children: [
+              SizedBox(
+                height: 220,
+                child: Stack(
+                  children: [
+                    CustomPaint(
+                      size: Size(MediaQuery.of(context).size.width, 220),
+                      painter: PinkCurvePainter(),
+                    ),
+                    SafeArea(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              '9:41',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                            const SizedBox(height: 8),
                             Row(
                               children: [
-                                Icon(Icons.signal_cellular_4_bar,
-                                    color: Colors.white, size: 16),
-                                const SizedBox(width: 4),
-                                Icon(Icons.wifi, color: Colors.white, size: 16),
-                                const SizedBox(width: 4),
-                                Icon(Icons.battery_full,
-                                    color: Colors.white, size: 16),
+                                InkWell(
+                                  onTap: () {
+                                    if (GoRouter.of(context).canPop()) {
+                                      context.pop();
+                                    } else {
+                                      context.go('/');
+                                    }
+                                  },
+                                  borderRadius: BorderRadius.circular(50),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      Icons.arrow_back_ios,
+                                      color: Colors.black,
+                                      size: 20,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Profile Saya',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ],
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 30),
-                        // Profile Card
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 10,
-                                offset: const Offset(0, 5),
+                            const SizedBox(height: 18),
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(18),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.08),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
+                              child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text(
-                                    'Adrian',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                    ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        user?.email?.split('@').first ??
+                                            'Loading...',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFFE74C3C),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        user?.gender ?? 'male',
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Color(0xFFE74C3C),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 6),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFFF9AA2),
-                                      borderRadius: BorderRadius.circular(20),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFFFF9AA2),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      elevation: 0,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 18, vertical: 8),
                                     ),
+                                    onPressed: () {},
                                     child: const Text(
-                                      'Online',
+                                      'Ubah',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 12,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Light-Light    10 Tahun',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              const Text(
-                                'Personal Informasi Media',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                              Text(
-                                'Membuat internet media, penyedia',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          // Menu Items
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Asuransi',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildMenuItem(
-                    title: 'Artificial Intelligence',
-                    icon: Icons.psychology_outlined,
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Tingkat kesehatan mu',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  _buildMenuItem(
-                    title: 'Artificial Intelligence',
-                    icon: Icons.psychology_outlined,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildMenuItem(
-                    title: 'Artificial Intelligence',
-                    icon: Icons.psychology_outlined,
-                  ),
-                  const Spacer(),
-                  // Bottom Navigation
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildBottomNavItem(Icons.home_outlined, false),
-                        _buildBottomNavItem(
-                            Icons.calendar_today_outlined, false),
-                        _buildBottomNavItem(
-                            Icons.notifications_outlined, false),
-                        _buildBottomNavItem(Icons.person, true),
-                      ],
-                    ),
-                  ),
-                ],
               ),
-            ),
+              Expanded(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                  child: user == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : ListView(
+                          children: [
+                            const SizedBox(height: 16),
+                            const Text(
+                              'Asuransi',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            _buildMenuItem(
+                              title: 'Tautkan Asuransimu',
+                              icon: Icons.medical_services_outlined,
+                              color: const Color(0xFFFFF0F1),
+                              iconColor: const Color(0xFFFF9AA2),
+                            ),
+                            const SizedBox(height: 24),
+                            const Text(
+                              'Riwayat Kesehatanmu',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            _buildMenuItem(
+                              title: 'Riwayat Pendetesian',
+                              icon: Icons.history,
+                              color: const Color(0xFFFFF0F1),
+                              iconColor: const Color(0xFFFF9AA2),
+                            ),
+                            const SizedBox(height: 12),
+                            _buildMenuItem(
+                              title: 'Hasil Konsultasi',
+                              icon: Icons.chat_outlined,
+                              color: const Color(0xFFFFF0F1),
+                              iconColor: const Color(0xFFFF9AA2),
+                            ),
+                            const SizedBox(height: 24),
+                          ],
+                        ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
   Widget _buildMenuItem({
     required String title,
     required IconData icon,
+    required Color color,
+    required Color iconColor,
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFFFFF0F1),
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: Row(
         children: [
           Container(
-            width: 40,
-            height: 40,
+            width: 32,
+            height: 32,
             decoration: BoxDecoration(
-              color: const Color(0xFFFFF0F1),
+              color: color,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
               icon,
-              color: const Color(0xFFFF9AA2),
+              color: iconColor,
               size: 20,
             ),
           ),
@@ -235,29 +244,18 @@ class ProfilScreen extends StatelessWidget {
             child: Text(
               title,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 15,
                 fontWeight: FontWeight.w500,
                 color: Colors.black87,
               ),
             ),
           ),
-          Icon(
+          const Icon(
             Icons.arrow_forward_ios,
-            color: Colors.grey[400],
-            size: 16,
+            color: Color(0xFFBDBDBD),
+            size: 18,
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNavItem(IconData icon, bool isActive) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      child: Icon(
-        icon,
-        color: isActive ? const Color(0xFFFF9AA2) : Colors.grey[400],
-        size: 24,
       ),
     );
   }
@@ -276,7 +274,7 @@ class PinkCurvePainter extends CustomPainter {
     path.lineTo(0, size.height - 40);
     path.quadraticBezierTo(
       size.width / 2,
-      size.height + 120,
+      size.height + 80,
       size.width,
       size.height - 40,
     );
